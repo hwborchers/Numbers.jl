@@ -9,7 +9,7 @@
 @test primes2(1, 100) == primesieve(100)
 
 # primefactors
-@test primefactors(1) == 1
+@test primefactors(1) == []
 @test primefactors(2^4)  == [2]
 @test primefactors(1001) == [7, 11, 13]
 @test primefactors(1013) == [1013]
