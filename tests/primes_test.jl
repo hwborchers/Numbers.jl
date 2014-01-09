@@ -43,7 +43,7 @@
 @test primroot(101) == 2
 
 # eulerphi()
-@test eulerphi(1) == 0
+@test eulerphi(1) == 1
 @test eulerphi(2) == 1
 @test eulerphi(3) == 2
 @test eulerphi(9) == 6
