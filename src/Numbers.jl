@@ -1,15 +1,14 @@
 module Numbers
 
+# Version 0.1.0 (2013-01-10)
 # package code goes here
 
   export primesieve, primes2,
          nextprime, prevprime,
          primefactors, twinprimes,
-         isprime, coprime,
-         extgcd, modinv,
-         eulerphi
+         coprime, eulerphi,
+         ordermod, primroot
 
   include("primes.jl")
-  include("gcd.jl")
 
 end # module

@@ -5,8 +5,7 @@
 using Numbers
 using Base.Test
 
-tests = ["primes",
-         "gcd"]
+tests = ["primes"]
 
 println("Running NUMBER tests ...")
 

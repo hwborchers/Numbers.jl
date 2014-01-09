@@ -1,4 +1,9 @@
+##  Eratosthenes' prime number sieve
 function primesieve(n::Integer)
+    if n <= 1
+        return Integer[]
+    end
+
     p = [1:2:n]
     q = length(p)
     p[1] = 2
@@ -9,17 +14,19 @@ function primesieve(n::Integer)
             end
         end
     end
+
     return p[p .> 0]
 end
 
 
+##  Find all prime numbers in  a given interval
 function primes2(n::Integer, m::Integer)
     if n > m
         error("Argument 'm' must be bigger than 'n'.")
     end
     if m <= 1000
-        p = primesieve(m)
-        return p[p .>= n]
+        P = primesieve(m)
+        return P[P .>= n]
     end
 
     myPrimes = primesieve(isqrt(m))
@@ -49,107 +56,89 @@ function primes2(n::Integer, m::Integer)
 end
 
 
+##  Return unique prime factors of n sorted
 function primefactors(n::Integer)
-    if n == 0
-        return(0)
-    elseif n < 0
-        error("Argument 'n' must be a nonnegative integer.")
-    end
-    if n < 4
-        return n
+    if n <= 0
+        error("Argument 'n' to be factored must be a positive integer.")
     end
 
-    k = int(log2(n))
-    F = Array(Integer, k)
-    m = isqrt(n)
-    P = primesieve(m)
-
-    l = 0
-    for p in P
-        if mod(n, p) == 0
-            l += 1
-            F[l] = p
-            n = div(n, p)
-            while mod(n, p) == 0
-                l += 1
-                F[l] = p
-                n = div(n, p)
-            end
-        end
-    end
-
-    if (n > 1)
-        l += 1
-        F[l] = n
-    end
-
-    return F[1:l]
+    f = factor(n)
+    return sort(collect(keys(f)))
 end
 
 
+##  Find prime number following n
 function nextprime(n::Integer)
-    if n <= 1
-        n = 1
+    if n <= 1; return 2; end
+    if n == 2; return 3; end
+    if iseven(n)
+        n += 1
+    else
+        n += 2
     end
-    n = n + 1
+    if isprime(n); return(n); end
 
-    # m = 2*n  # Bertrands law
-    d1 = max(3, int(log(n) + 1))
-    P  = primes2(n, n + d1)
-
-    while length(P) == 0
-        n = n + d1 + 1
-        P = primes2(n, n + d1)
+    if mod(n, 3) == 1
+        a = 4; b = 2
+    elseif mod(n, 3) == 2
+        a = 2; b = 4
+    else
+        n += 2
+        a = 2; b = 4
     end
 
-    return minimum(P)
+    p = n
+    while !isprime(p)
+        p += a
+        if isprime(p); break; end
+        p += b
+        if isprime(p); break; end
+        p += a
+    end
+
+    return p
 end
 
 
+## Find prime number preceeding n
 function prevprime(n::Integer)
     if n <= 2
         return Array(typeof(n), 0)
-    end
-    n = n - 1
-
-    if n <= 10
-        P = [2, 3, 5, 7]
-        return max(P[P .<= n])
+    elseif n <= 3
+        return 2
     end
 
-    # m <- 2*n  # Bertrands law
-    d1 = max(3, int(log(n) + 1))
-    P  = primes2(n - d1, n)
+    if iseven(n)
+        n -= 1
+    else
+        n -= 2
+    end    
+    if isprime(n); return n; end
 
-    while length(P) == 0 || n - d1 < 3
-        n = n - d1 - 1
-        P = primes2(n - d1, n)
+    if mod(n, 3) == 1
+        a = 2; b = 4
+    elseif mod(n, 3) == 2
+        a = 4; b = 2
+    else
+        n -= 2
+        a = 2; b = 4
+    end
+    
+    p = n
+    while !isprime(p)
+        p -= a
+        if isprime(p); break; end
+        p -= b
+        if isprime(p); break; end
+        p -= a
     end
 
-    return maximum(P)
+    return p
+    
 end
 
 
-function isprime(n::Integer)
-    if n <= 0
-        error("Argument 'n' must be a natural number (greater zero).")
-    elseif n == 1
-        return false
-    end
-
-    l = true
-    P = primesieve(isqrt(n))
-    for p in P
-        if mod(n, p) == 0
-            l = false
-            break
-        end
-    end
-
-    return l
-end
-
-
+##  Find all twin primes
 function twinprimes(n::Integer, m::Integer)
     P = primes2(n, m)
     inds = find(diff(P) .== 2)
@@ -158,15 +147,76 @@ function twinprimes(n::Integer, m::Integer)
 end
 
 
+##  Coprimality
+function coprime(n::Integer, m::Integer)
+    if n == 0 && m == 0
+        return false
+    end
+
+    if gcd(n, m) > 1 
+        false
+    else
+        true
+    end
+end
+
+
+##  Order of the element n (in the ring) modulo m
+function ordermod(n::Integer, m::Integer)
+    if n <= 0 || m <= 0
+        error("Arguments 'n' and 'm' must be positive integers.")
+    end
+    if m == 1 || gcd(n, m) > 1; return 0; end
+    if n == 1; return 1; end
+
+    r = mod(n, m)
+    if r == 0; return 0; end
+
+    k = 1
+    while r != 1
+        r = mod(n*r, m)
+        k += 1
+    end
+
+    return k
+end
+
+
+##  Find a primitive root modulo m
+function primroot(m::Integer)
+    if !isprime(m)
+        error("Argument 'm' must be a prime number")
+    end
+    if m == 2; return 1; end
+
+    P = primefactors(m-1)
+    for r = 2:(m-1)
+        not_found = true
+        for p in P
+            if powermod(r, div(m-1, p), m) == 1
+                not_found = false
+            end
+        end
+        if not_found
+            return r
+        end
+    end
+
+    return 0
+end
+
+
+##  Euler's Phi (or: totient) function
 function eulerphi(n::Integer)
     if n <= 0
         error("Argument 'n' must be a (positive) natural number.")
     end
 
     m = n
-    for p in unique(primefactors(n))  # must be unique
-        m = m - div(m, p)  # m = m * (1 - 1/p)
+    for p in primefactors(n)    # must be unique
+        m = m - div(m, p)       # m = m * (1 - 1/p)
     end
 
     return int(round(m))
 end
+

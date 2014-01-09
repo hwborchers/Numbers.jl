@@ -2,35 +2,38 @@
 
 Package **Numbers** will provide some basic number-theoretic functions for Julia, mostly centered around properties of prime numbers. At the moment, no attempt has been made to integrate *big* natural numbers, all calculations have to stay below `2^63-1`.
 
+The following integer functions from Base are used: `isprime(n)`, `primes(n)` all primes below n, `gcd(a,b)` resp. `gcdx(a,b)` the (extended) Euclidean algorithm, `lcm(a,b)`, `factor(n)` prime factorization of n, `powermod(n,p,m)` p-th power of n modulo m, and `invmod(n,m)` the inverse of n modulo m.
 
 ## Available functions ##
 
 In the following, all input parameters are assumed to be natural numbers.
 
 * `primesieve(n)`:
-  returns all primes up to `n`;  
-  this is slightly faster than the function `primes()` in Julia Base.
+  returns all primes up to `n`; works up to 10^10 and 
+  is slightly faster than the function `primes()` in Julia's Base.
 * `primes2(n, m)`:
   computes all prime numbers between `n` and `m`;  
-  this is *much* faster than using `primes(m)` and removing all primes less than `n`.
+  this is often *much* faster than using `primes(m)` and removing primes less 
+  than `n`, or using `isprime` iteratively.
 * `nextprime(n)`, `prevprime(n)`:
   finds the next or previous prime resp. to `n`.
 * `primefactors(n)`:
-  returns all prime factors of `n` with multiplicities.
-* `isprime(n)`:
-  returns `true` or `false` depending on whether `n` is prime or not.
+  returns all unique prime factors increasingly sorted.
 * `twinprimes(n, m)`:
   computes all twin primes (prime pairs) between `n` and `m`.
-* `extgcd(a, b)`:
-  the *extended* Euclidean algorithm not only returns the greatest common divisor `g`, but also two numbers `n` and `m` such that `g = n * a + m * b`. Significantly faster than `gcd` in Julia Base. (`a` and `b` may also be negative integers.)
 * `coprime(n, m)`:
-  returns `false` or `true` depending on whether `n` and `m` have a nontrivial common divisor or not.
-* `modinv(n, m)`:
-  calculates the modular inverse of `n` modulo `m`.
+  returns `false` or `true` depending on whether `n` and `m` have a nontrivial 
+  common divisor or not.
+* `ordermod(n, m)`:
+  Determine the order of n in the multiplicative group modulo m.
+* `primroot(m)`:
+  Determine the smallest primitive root modulo m, i.e. a generating element
+  of the cyclic multiplicative group modulo m.
 * `eulerphi(n)`:
-  counts the number of integers `k` between `1` and `n` that are coprime to `n`, i.e. `gcd(k,n)==1` for `1<=k<=n` (Euler's Phi function).
+  counts the number of integers `k` between `1` and `n` that are coprime to 
+  `n`, i.e. `gcd(k,n)==1` and `1<=k<=n` (Euler's Phi or totient function).
 
-## Examples ##
+## Usage examples ##
 
     # all primes between 1e06 and 1e06+50
     julia> primes2(1000000, 1000050)
@@ -40,23 +43,19 @@ In the following, all input parameters are assumed to be natural numbers.
      1000037
      1000039
 
-    # nearest primes to 1e06
+    # nearest primes to 1e06, above and below
     julia> [prevprime(1000000), nextprime(1000000)]
     2-element Array{Int64,1}:
       999983
      1000003
+    julia> nextprime(47326693)
 
-    # Euler's decomposition of the Fermat number 2^32 + 1
-    julia> n = 2^32 + 1; primefactors(n)
-    2-element Array{Integer,1}:
-         641
-     6700417
-
-    # is 2^32 +1 prime or not
-    julia> n = 2^32 + 1; isprime(n)     # Fermat number
-    false
-    julia> n = 2^31 - 1; isprime(n)     # eighth Mersenne prime
-    true
+    # unique prime factors increasingly sorted
+    julia> primefactors(1002001)
+    3-element Array{Int64,1}
+      7
+     11
+     13
 
     # twin prime pairs above 1e09
     julia> twinprimes(1000000000, 1000000500)
@@ -64,19 +63,23 @@ In the following, all input parameters are assumed to be natural numbers.
      1000000007  1000000009
      1000000409  1000000411
 
-    # extended Euclidean algorithm
-    julia> g,n,m = extgcd(1001, 1334)
-    (1,-665,499)                  # -665*1001 + 499*1334 == 1  is true
-
     # are adjacent Fibonacci numbers coprime?
-    julia> coprime(46368, 75025)  # fib23, Fib24
+    julia> coprime(46368, 75025)  # Fib23, Fib24
     true
-    julia> coprime(1001, 1334)
-    true
+    julia> coprime(1001, 4199)
+    false
 
-    # modular inverse modulo 1001
-    julia> modinv(5, 1001)        #=> 801 because 5*801 = 4005 = 1 mod 1001
-    801
+    # 7 is primitive root modulo 17, 13 not
+    julia> ordermod(7, 17)
+    16
+    julia> ordermod(13, 17)
+    4
+
+    # Find the smallest primitive root modulo m
+    julia> primroot(17)
+    3
+    julia> primroot(71)
+    7
 
     # Euler's Phi (or totient) function
     julia> for i = 10:20
