@@ -30,6 +30,12 @@
 @test coprime(11*13*17, 13*17*19) == false
 @test coprime(2*3, 5*7) == true
 
+# linmod()
+@test linmod(3, 5, 6) == []
+@test linmod(3, 4, 5) == [3]
+@test linmod(3, 6, 9) == [2, 5, 8]
+@test linmod(-14, 30, 100) == [5, 55]
+
 # ordermod()
 @test ordermod(1, 11) == 1
 @test ordermod(2, 7) == 3

@@ -161,6 +161,24 @@ function coprime(n::Integer, m::Integer)
 end
 
 
+##  Solve linear modulo equations
+function linmod(a::Integer, b::Integer, m::Integer)
+    m > 1 || error("Argument 'm' must be an integer greater 1")
+    T = typeof(m)
+    g, e, f = gcdx(a, m)
+
+    x = T[]
+    if mod(b, g) == 0
+        x0 = mod(e * div(b, g), m)
+        for i = 0:(g-1)
+            x = [x, mod(x0 + i * div(m, g) , m)]
+        end
+    end
+
+    return x
+end
+
+
 ##  Order of the element n (in the ring) modulo m
 function ordermod(n::Integer, m::Integer)
     if n <= 0 || m <= 0

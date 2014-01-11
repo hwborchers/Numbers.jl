@@ -24,6 +24,7 @@ In the following, all input parameters are assumed to be natural numbers.
 * `coprime(n, m)`:
   returns `false` or `true` depending on whether `n` and `m` have a nontrivial 
   common divisor or not.
+* `linmod(a, b, m)` solves the linear equation `a * x = b mod m`. 
 * `ordermod(n, m)`:
   Determine the order of n in the multiplicative group modulo m.
 * `primroot(m)`:
@@ -68,6 +69,16 @@ In the following, all input parameters are assumed to be natural numbers.
     true
     julia> coprime(1001, 4199)
     false
+
+    # linear equations modulo m
+    julia> linmod(14, 30, 100)
+    2-element Array{Int64,1}:
+     95
+     45
+    julia> linmod(-14, 30, 100)
+    2-element Array{Int64,1}:
+      5
+     55
 
     # 7 is primitive root modulo 17, 13 not
     julia> ordermod(7, 17)

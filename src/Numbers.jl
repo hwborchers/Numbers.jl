@@ -6,8 +6,9 @@ module Numbers
   export primesieve, primes2,
          nextprime, prevprime,
          primefactors, twinprimes,
-         coprime, eulerphi,
-         ordermod, primroot
+         coprime, linmod,
+         ordermod, primroot,
+         eulerphi
 
   include("primes.jl")
 
