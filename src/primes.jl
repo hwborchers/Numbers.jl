@@ -92,8 +92,6 @@ function nextprime(n::Integer)
         p += a
         if isprime(p); break; end
         p += b
-        if isprime(p); break; end
-        p += a
     end
 
     return p
@@ -129,12 +127,9 @@ function prevprime(n::Integer)
         p -= a
         if isprime(p); break; end
         p -= b
-        if isprime(p); break; end
-        p -= a
     end
 
     return p
-    
 end
 
 
