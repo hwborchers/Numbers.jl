@@ -20,6 +20,9 @@ function primesieve(n::BigInt)
     return p[p .> 0]
 end
 
+function primesieve(n::Integer)
+    return primesieve(BigInt(n))
+end
 
 ##  Find all prime numbers in  a given interval
 function primes2(n::BigInt, m::BigInt)
@@ -57,6 +60,9 @@ function primes2(n::BigInt, m::BigInt)
     return N[A .== 0]
 end
 
+function primes2(n::Integer, m::Integer)
+     return primes2(n::BigInt, m::BigInt)
+end
 
 ##  Return unique prime factors of n sorted
 function primefactors(n::BigInt)
@@ -68,6 +74,9 @@ function primefactors(n::BigInt)
     return sort(collect(keys(f)))
 end
 
+function primefactors(n::Integer)
+    return primefactors(n::BigInt)
+end
 
 ##  Find prime number following n
 function nextprime(n::BigInt)
@@ -99,6 +108,9 @@ function nextprime(n::BigInt)
     return p
 end
 
+function nextprime(n::Integer)
+    return  nextprime(n::BigInt)
+end
 
 ## Find prime number preceeding n
 function prevprime(n::BigInt)
@@ -134,6 +146,9 @@ function prevprime(n::BigInt)
     return p
 end
 
+function prevprime(n::Integer)
+    return   prevprime(n::BigInt)
+end 
 
 ##  Find all twin primes
 function twinprimes(n::BigInt, m::BigInt)
@@ -157,6 +172,9 @@ function coprime(n::BigInt, m::BigInt)
     end
 end
 
+function coprime(n::Integer, m::Integer)
+    return   coprime(n::BigInt, m::BigInt)
+end
 
 ##  Solve linear modulo equations
 function linmod(a::BigInt, b::BigInt, m::BigInt)
@@ -175,6 +193,9 @@ function linmod(a::BigInt, b::BigInt, m::BigInt)
     return x
 end
 
+function linmod(a::Integer, b::Integer, m::Integer)
+    return   linmod(a::BigInt, b::BigInt, m::BigInt)
+end 
 
 ##  Order of the element n (in the ring) modulo m
 function ordermod(n::BigInt, m::BigInt)
@@ -195,7 +216,9 @@ function ordermod(n::BigInt, m::BigInt)
 
     return k
 end
-
+function ordermod(n::Integer, m::Integer)
+    return   ordermod(n::BigInt, m::BigInt)
+end
 
 ##  Find a primitive root modulo m
 function primroot(m::BigInt)
@@ -220,6 +243,9 @@ function primroot(m::BigInt)
     return 0
 end
 
+function primroot(m::Integer)
+    return  primroot(m::BigInt)
+end
 
 ##  Euler's Phi (or: totient) function
 function eulerphi(n::BigInt)
