@@ -232,6 +232,6 @@ function eulerphi(n::Integer)
         m = m - div(m, p)       # m = m * (1 - 1/p)
     end
 
-    return int(round(m))
+    return Int(round(m))
 end
 
