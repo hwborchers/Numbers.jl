@@ -1,7 +1,7 @@
 ## factor has been moved to Primes package
 using Primes
 ##  Eratosthenes' prime number sieve
-function primesieve(n::Integer)
+function primesieve(n::BigInt)
     if n <= 1
         return Integer[]
     end
@@ -22,7 +22,7 @@ end
 
 
 ##  Find all prime numbers in  a given interval
-function primes2(n::Integer, m::Integer)
+function primes2(n::BigInt, m::BigInt)
     if n > m
         error("Argument 'm' must be bigger than 'n'.")
     end
@@ -59,7 +59,7 @@ end
 
 
 ##  Return unique prime factors of n sorted
-function primefactors(n::Integer)
+function primefactors(n::BigInt)
     if n <= 0
         error("Argument 'n' to be factored must be a positive integer.")
     end
@@ -70,7 +70,7 @@ end
 
 
 ##  Find prime number following n
-function nextprime(n::Integer)
+function nextprime(n::BigInt)
     if n <= 1; return 2; end
     if n == 2; return 3; end
     if iseven(n)
@@ -101,7 +101,7 @@ end
 
 
 ## Find prime number preceeding n
-function prevprime(n::Integer)
+function prevprime(n::BigInt)
     if n <= 2
         return Array(typeof(n), 0)
     elseif n <= 3
@@ -136,7 +136,7 @@ end
 
 
 ##  Find all twin primes
-function twinprimes(n::Integer, m::Integer)
+function twinprimes(n::BigInt, m::BigInt)
     P = primes2(n, m)
     inds = find(diff(P) .== 2)
 
@@ -145,7 +145,7 @@ end
 
 
 ##  Coprimality
-function coprime(n::Integer, m::Integer)
+function coprime(n::BigInt, m::BigInt)
     if n == 0 && m == 0
         return false
     end
@@ -159,7 +159,7 @@ end
 
 
 ##  Solve linear modulo equations
-function linmod(a::Integer, b::Integer, m::Integer)
+function linmod(a::BigInt, b::BigInt, m::BigInt)
     m > 1 || error("Argument 'm' must be an integer greater 1")
     T = typeof(m)
     g, e, f = gcdx(a, m)
@@ -177,7 +177,7 @@ end
 
 
 ##  Order of the element n (in the ring) modulo m
-function ordermod(n::Integer, m::Integer)
+function ordermod(n::BigInt, m::BigInt)
     if n <= 0 || m <= 0
         error("Arguments 'n' and 'm' must be positive integers.")
     end
@@ -198,7 +198,7 @@ end
 
 
 ##  Find a primitive root modulo m
-function primroot(m::Integer)
+function primroot(m::BigInt)
     if !isprime(m)
         error("Argument 'm' must be a prime number")
     end
@@ -222,7 +222,7 @@ end
 
 
 ##  Euler's Phi (or: totient) function
-function eulerphi(n::Integer)
+function eulerphi(n::BigInt)
     if n <= 0
         error("Argument 'n' must be a (positive) natural number.")
     end
@@ -232,6 +232,6 @@ function eulerphi(n::Integer)
         m = m - div(m, p)       # m = m * (1 - 1/p)
     end
 
-    return Int(round(m))
+    return BigInt(round(m))
 end
 
