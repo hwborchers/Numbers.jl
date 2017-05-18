@@ -234,4 +234,6 @@ function eulerphi(n::BigInt)
 
     return BigInt(round(m))
 end
-
+function eulerphi(n::Int)
+    return eulerphi(BigInt(n))
+end
