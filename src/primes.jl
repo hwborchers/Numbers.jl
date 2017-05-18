@@ -1,3 +1,5 @@
+## factor has been moved to Primes package
+using Primes
 ##  Eratosthenes' prime number sieve
 function primesieve(n::Integer)
     if n <= 1
